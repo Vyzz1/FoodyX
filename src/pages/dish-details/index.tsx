@@ -23,7 +23,6 @@ import { cn } from "@/lib/utils";
 import OptionGroupHover from "./components/option-group-hover";
 import AddToCart from "./components/add-to-card";
 import { Button } from "@/components/ui/button";
-import { Helmet } from "react-helmet-async";
 const DishDetails = () => {
   const { id } = useParams<{ id: string }>();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -207,36 +206,6 @@ const DishDetails = () => {
           </div>
         </div>
       </div>
-      <Helmet>
-        <title>{dish.name}</title>
-        <meta
-          name="description"
-          content={`Order ${dish.name} from FoodyX. Enjoy delicious food delivered fast. ${dish.description}`}
-        />
-        <meta
-          name="keywords"
-          content={`${dish.name}, food delivery, delicious food, fast delivery, FoodyX`}
-        />
-        <meta name="author" content="VyHuynh" />
-
-        <meta property="og:title" content={dish.name} />
-        <meta
-          property="og:description"
-          content={`Order ${dish.name} from FoodyX. Enjoy delicious food delivered fast. ${dish.description}`}
-        />
-        <meta
-          property="og:image"
-          content={dish.images[0] || "/placeholder.svg"}
-        />
-        <link
-          rel="canonical"
-          href={`https://foodyx-kappa.vercel.app/dish/${id}`}
-        />
-        <meta
-          property="og:url"
-          content={`https://foodyx-kappa.vercel.app/dish/${id}`}
-        />
-      </Helmet>
     </section>
   );
 };

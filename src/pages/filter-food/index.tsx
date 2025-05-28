@@ -6,7 +6,6 @@ import { AmberLoading } from "@/components/shared/amber-loading";
 import FoodGallery from "./components/food-gallery";
 import { useInView } from "react-intersection-observer";
 import { useEffect } from "react";
-import { Helmet } from "react-helmet-async";
 
 export default function FilterFood() {
   const [params] = useSearchParams();
@@ -61,32 +60,6 @@ export default function FilterFood() {
           </div>
         )}
       </div>
-      <Helmet>
-        <title>Find Your Foods - FoodyX</title>
-        <meta
-          name="description"
-          content="Discover a wide variety of delicious foods tailored to your taste. Explore our collection and find your favorite dishes today!"
-        />
-        <link
-          rel="canonical"
-          href="https://foodyx-kappa.vercel.app/filter-food"
-        />
-        <meta property="og:title" content="Find Your Foods - FoodyX" />
-        <meta
-          property="og:description"
-          content="Discover a wide variety of delicious foods tailored to your taste. Explore our collection and find your favorite dishes today!"
-        />
-
-        <meta
-          property="og:image"
-          content="https://res.cloudinary.com/dl8h3byxa/image/upload/v1748440111/Screenshot_2_etyvu8.png"
-        />
-
-        <meta
-          property="og:url"
-          content="https://foodyx-kappa.vercel.app/filter-food"
-        />
-      </Helmet>
     </section>
   );
 }
