@@ -12,7 +12,6 @@ import ChangeAvatar from "./pages/change-avatar";
 import UserAddress from "./pages/user-address";
 import CategoryManagement from "./pages/category-management";
 import DishForm from "./pages/dishes-form";
-import Header from "./components/shared/header";
 import DishManagement from "./pages/dish-management";
 import EditDish from "./pages/dish-management/edit-dish";
 import LayoutDefault from "./layout/layout-default";
@@ -36,6 +35,7 @@ import Homepage from "./pages/homepage";
 import AboutPage from "./pages/about";
 import ContactPage from "./pages/contact";
 import UploadImages from "./pages/update-image";
+import NotFoundPage from "./components/shared/_404";
 
 function App() {
   const router = createBrowserRouter([
@@ -225,7 +225,7 @@ function App() {
       path: "*",
       element: (
         <>
-          <Header />
+          <NotFoundPage />
         </>
       ),
     },
