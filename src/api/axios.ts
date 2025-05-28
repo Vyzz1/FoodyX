@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const baseURL = `http://localhost:8000/api`;
+export const baseURL = `https://food-ordering-system-lemon.vercel.app/api`;
 
 export default axios.create({
   baseURL: baseURL,
