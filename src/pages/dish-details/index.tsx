@@ -228,8 +228,14 @@ const DishDetails = () => {
           property="og:image"
           content={dish.images[0] || "/placeholder.svg"}
         />
-        <link rel="canonical" href={`https://example.com/dish/${id}`} />
-        <meta property="og:url" content={`https://example.com/dish/${id}`} />
+        <link
+          rel="canonical"
+          href={`https://foodyx-kappa.vercel.app/dish/${id}`}
+        />
+        <meta
+          property="og:url"
+          content={`https://foodyx-kappa.vercel.app/dish/${id}`}
+        />
       </Helmet>
     </section>
   );

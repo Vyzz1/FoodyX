@@ -67,7 +67,10 @@ export default function FilterFood() {
           name="description"
           content="Discover a wide variety of delicious foods tailored to your taste. Explore our collection and find your favorite dishes today!"
         />
-        <link rel="canonical" href="/filter-food" />
+        <link
+          rel="canonical"
+          href="https://foodyx-kappa.vercel.app/filter-food"
+        />
         <meta property="og:title" content="Find Your Foods - FoodyX" />
         <meta
           property="og:description"
@@ -79,7 +82,10 @@ export default function FilterFood() {
           content="https://res.cloudinary.com/dl8h3byxa/image/upload/v1748440111/Screenshot_2_etyvu8.png"
         />
 
-        <meta property="og:url" content="https://foodyx.com/filter-food" />
+        <meta
+          property="og:url"
+          content="https://foodyx-kappa.vercel.app/filter-food"
+        />
       </Helmet>
     </section>
   );
