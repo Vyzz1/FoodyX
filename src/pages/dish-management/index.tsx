@@ -35,12 +35,13 @@ const DishManagement = () => {
           </div>
           <Button
             variant="outline"
+            size={"sm"}
             onClick={() => {
               navigator("/admin/dishes/create");
             }}
-            className="bg-amber-500 text-white hover:bg-amber-600"
+            className="bg-amber-500 text-white hover:bg-amber-600 md:flex items-center space-x-2 "
           >
-            <PlusIcon className="mr-2" /> Create New Dish
+            <PlusIcon /> <p className="hidden md:block">Create New Dish</p>
           </Button>
         </div>
 

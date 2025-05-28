@@ -17,7 +17,7 @@ const OptionGroupHover: React.FC<OptionGroupHoverProps> = ({
 
   return (
     <div className="mb-8">
-      <h3 className="text-lg font-medium text-gray-900 mb-4">
+      <h3 className="text-lg font-medium text-gray-900 mb-4 dark:text-stone-200">
         Available Options
       </h3>
 

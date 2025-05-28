@@ -28,6 +28,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { useSearchParams } from "react-router-dom";
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -162,10 +168,10 @@ export function DataTableServerSide<TData, TValue>({
             </Select>
           </div>
 
-          <div className="md:flex items-center space-x-2 grid grid-cols-2 md:space-x-2 md:space-y-0 space-y-2">
+          <div className="md:flex items-center  flex flex-wrap grid-cols-2    space-x-2 gap-y-2">
             <Button
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={() => {
                 const newParams = new URLSearchParams(searchParams);
                 newParams.set("page", "0");
@@ -173,11 +179,11 @@ export function DataTableServerSide<TData, TValue>({
               }}
               disabled={!isPrevious && currentPage === 0}
             >
-              First
+              <ChevronsLeft />
             </Button>
             <Button
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={() => {
                 const newParams = new URLSearchParams(searchParams);
                 newParams.set("page", String(currentPage - 1));
@@ -185,11 +191,11 @@ export function DataTableServerSide<TData, TValue>({
               }}
               disabled={!isPrevious}
             >
-              Previous
+              <ChevronLeft />
             </Button>
             <Button
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={() => {
                 const newParams = new URLSearchParams(searchParams);
                 newParams.set("page", String(currentPage + 1));
@@ -197,11 +203,11 @@ export function DataTableServerSide<TData, TValue>({
               }}
               disabled={!isNext || isLast}
             >
-              Next
+              <ChevronRight />
             </Button>
             <Button
               variant="outline"
-              size="sm"
+              size="icon"
               onClick={() => {
                 const newParams = new URLSearchParams(searchParams);
                 newParams.set("page", String(totalPages - 1));
@@ -209,7 +215,7 @@ export function DataTableServerSide<TData, TValue>({
               }}
               disabled={isLast}
             >
-              Last
+              <ChevronsRight />
             </Button>
           </div>
         </div>
