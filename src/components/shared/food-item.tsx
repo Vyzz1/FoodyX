@@ -9,6 +9,8 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { Clock } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+import axios from "@/api/axios";
 
 interface FoodItemProps {
   food: MenuItem;
@@ -33,9 +35,27 @@ export const FoodItemSkeleton = () => {
 };
 
 export default function FoodItem({ food, onViewDetails }: FoodItemProps) {
+  const queryClient = useQueryClient();
+  const handlePrefetchFoodDetails = (foodId: string) => () => {
+    if (typeof window === "undefined") return;
+
+    queryClient.prefetchQuery({
+      queryKey: ["fetchData", `food/${foodId}`],
+      queryFn: async () => {
+        const response = await axios.get(`/food/${foodId}`);
+        if (response.status === 200) {
+          return response.data;
+        } else {
+          throw new Error("Failed to fetch food details");
+        }
+      },
+    });
+  };
+
   return (
     <motion.div
       layout
+      onMouseEnter={handlePrefetchFoodDetails(food.id)}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
