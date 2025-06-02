@@ -8,7 +8,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { getStatusClassName } from "@/lib/utils";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const statusPriority: Record<string, number> = {
   Pending: 1,
@@ -24,6 +24,7 @@ interface ChangeStatusProps {
   children?: React.ReactNode;
   isTrigeer?: boolean;
   loading?: boolean;
+  isFinish?: boolean;
 }
 
 const ChangeOrderStatus = ({
@@ -32,6 +33,7 @@ const ChangeOrderStatus = ({
   isTrigeer,
   children,
   loading = false,
+  isFinish = false,
 }: ChangeStatusProps) => {
   const [open, setOpen] = useState(false);
 
@@ -45,8 +47,13 @@ const ChangeOrderStatus = ({
 
   const handleStatusChange = (status: string) => {
     onChangeStatus(status);
-    setOpen(false);
   };
+
+  useEffect(() => {
+    if (isFinish) {
+      setOpen(false);
+    }
+  }, [isFinish]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>

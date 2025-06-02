@@ -50,8 +50,6 @@ export function LoginForm({
         withCredentials: true,
       });
 
-      console.log("Login response:", response.data);
-
       if (response.data.token && response.data.expiryDate) {
         const { token, expiryDate } = response.data;
 

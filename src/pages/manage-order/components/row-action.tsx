@@ -16,6 +16,7 @@ import { DialogTrigger } from "@/components/ui/dialog";
 import useSubmitData from "@/hooks/useSubmitData";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
+import { useEffect, useRef } from "react";
 interface RowActionProps {
   id: string;
   currentStatus: string;
@@ -26,25 +27,54 @@ const RowAction = ({ id, currentStatus, queryKey }: RowActionProps) => {
 
   const queryClient = useQueryClient();
   const [params] = useSearchParams();
+  const toastIdRef = useRef<string | number | null>(null);
 
-  const { mutate, isPending } = useSubmitData(
+  const { mutate, isPending, isSuccess } = useSubmitData(
     `/order/${id}`,
     () => {
       queryClient.invalidateQueries({
         queryKey: queryKey,
       });
       toast.dismiss();
-      toast.success("Status changed successfully");
     },
     (error: any) => {
       const message = error?.response?.data?.message || "An error occurred.";
-      toast.dismiss();
+      if (toastIdRef.current) {
+        toast.dismiss(toastIdRef.current);
+        toastIdRef.current = null;
+      }
       toast.error(message);
     }
   );
 
+  // Handle loading state
+  useEffect(() => {
+    if (isPending && !toastIdRef.current) {
+      toastIdRef.current = toast.loading("Changing order status...");
+    }
+  }, [isPending]);
+
+  // Handle success state
+  useEffect(() => {
+    if (isSuccess && toastIdRef.current) {
+      toast.dismiss(toastIdRef.current);
+      toast.success("Order status changed successfully");
+      toastIdRef.current = null;
+    }
+  }, [isSuccess]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (toastIdRef.current) {
+        toast.dismiss(toastIdRef.current);
+      }
+    };
+  }, []);
+
   return (
     <ChangeOrderStatus
+      isFinish={isSuccess}
       loading={isPending}
       currentStatus={currentStatus}
       onChangeStatus={(newStatus) => {

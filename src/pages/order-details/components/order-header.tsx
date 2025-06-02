@@ -1,3 +1,5 @@
+"use client";
+
 import { format } from "date-fns";
 import { ArrowLeft, Printer } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -8,6 +10,7 @@ import useSubmitData from "@/hooks/useSubmitData";
 import { toast } from "sonner";
 import { useQueryClient } from "@tanstack/react-query";
 import RepayButton from "@/components/shared/repay-button";
+import { useEffect, useRef } from "react";
 
 interface OrderHeaderProps {
   orderId: string;
@@ -26,12 +29,12 @@ export function OrderHeader({
 }: OrderHeaderProps) {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const toastIdRef = useRef<string | number | null>(null);
 
   const isAdmin = currentUser?.role.toLowerCase() === "admin";
   const queryClient = useQueryClient();
 
   function onSuccess() {
-    toast.success("Status changed successfully");
     queryClient.invalidateQueries({
       queryKey: ["fetchData", `/order/${orderId}`],
     });
@@ -45,15 +48,45 @@ export function OrderHeader({
     });
   }
 
-  const { mutate, isPending } = useSubmitData(
+  const { mutate, isPending, isSuccess } = useSubmitData(
     `/order/${orderId}`,
     onSuccess,
     (error: any) => {
       const message = error?.response?.data?.message || "An error occurred.";
-      toast.dismiss();
+      // Dismiss loading toast if it exists
+      if (toastIdRef.current) {
+        toast.dismiss(toastIdRef.current);
+        toastIdRef.current = null;
+      }
       toast.error(message);
     }
   );
+
+  // Handle loading state
+  useEffect(() => {
+    if (isPending && !toastIdRef.current) {
+      toastIdRef.current = toast.loading("Changing order status...");
+    }
+  }, [isPending]);
+
+  // Handle success state
+  useEffect(() => {
+    if (isSuccess && toastIdRef.current) {
+      toast.dismiss(toastIdRef.current);
+      toast.success("Order status changed successfully");
+      toastIdRef.current = null;
+    }
+  }, [isSuccess]);
+
+  // Cleanup on unmount
+  useEffect(() => {
+    return () => {
+      if (toastIdRef.current) {
+        toast.dismiss(toastIdRef.current);
+      }
+    };
+  }, []);
+
   return (
     <>
       <div className="mb-6 flex items-center justify-between">
@@ -72,6 +105,7 @@ export function OrderHeader({
           {isAdmin && (
             <ChangeOrderStatus
               isTrigeer={true}
+              isFinish={isSuccess}
               currentStatus={currentStatus!}
               onChangeStatus={(status) => {
                 mutate({ data: { status }, type: "patch" });
