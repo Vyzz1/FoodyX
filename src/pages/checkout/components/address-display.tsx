@@ -11,7 +11,7 @@ interface AddressDisplayProps {
 
 const AddressDisplay = ({ addresses }: AddressDisplayProps) => {
   const [currentAddress, setCurrentAddress] = useState<UserAddress>(
-    addresses.find((address) => address.isDefault)!
+    addresses.find((address) => address.isDefault || address)!
   );
 
   const { setAddress } = useCheckout();

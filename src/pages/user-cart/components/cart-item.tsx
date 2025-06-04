@@ -7,7 +7,10 @@ import { Checkbox } from "@/components/ui/checkbox";
 import DeleteService from "@/components/shared/delete-service";
 import useSubmitData from "@/hooks/useSubmitData";
 import { toast } from "sonner";
-import { useQueryClient } from "@tanstack/react-query";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "@/api/axios";
+import useAxiosPrivate from "@/hooks/useAxiosPrivate";
+import { useAuth } from "@/hooks/useAuth";
 
 interface CartItemProps {
   item: CartItem;
@@ -24,31 +27,74 @@ export default function CartItem({
 
   const client = useQueryClient();
 
-  const { mutate, isPending } = useSubmitData(
-    `cart/quantity/${item.id}`,
-    () => {
-      client.invalidateQueries({
-        queryKey: ["fetchData", "/cart"],
+  //  client.invalidateQueries({
+  //     queryKey: ["fetchData", "/cart"],
+  //   });
+
+  const axios = useAxiosPrivate({ type: "private" });
+  const user = useAuth();
+  const { mutate, isPending } = useMutation({
+    mutationFn: async (quantity: number) => {
+      const response = await axios.patch(`/cart/quantity/${item.id}`, {
+        quantity: quantity,
       });
+
+      return response.data;
     },
-    () => {
-      toast.error("Failed to update quantity");
-    }
-  );
+
+    onMutate: async (quantity: number) => {
+      await client.cancelQueries({
+        queryKey: ["fetchData", "/cart", user.currentUser?.id.toString()],
+      });
+
+      const previousData = client.getQueryData<CartItem[]>([
+        "fetchData",
+
+        "/cart",
+
+        user.currentUser?.id.toString(),
+      ]);
+
+      client.setQueryData<CartItem[]>(
+        ["fetchData", "/cart", user.currentUser?.id.toString()],
+        () => {
+          return previousData?.map((cartItem) => {
+            if (cartItem.id === item.id) {
+              return {
+                ...cartItem,
+                subTotal: cartItem.basePrice * quantity,
+                quantity: quantity,
+              };
+            }
+            return cartItem;
+          });
+        }
+      );
+
+      return { previousData };
+    },
+
+    onError: (error, _, context) => {
+      const message = (error as Error).message || "An error occurred";
+      toast.error(message);
+      client.setQueryData<CartItem[]>(
+        ["fetchData", "/cart"],
+        context?.previousData
+      );
+    },
+
+    onSettled: () => {
+      client.invalidateQueries({ queryKey: ["fetchData", "/cart"] });
+    },
+  });
 
   const handleIncrement = () => {
-    mutate({
-      data: { quantity: item.quantity + 1 },
-      type: "patch",
-    });
+    mutate(item.quantity + 1);
   };
 
   const handleDecrement = () => {
     if (item.quantity > 1) {
-      mutate({
-        data: { quantity: item.quantity - 1 },
-        type: "patch",
-      });
+      mutate(item.quantity - 1);
     }
   };
 

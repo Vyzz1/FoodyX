@@ -77,8 +77,7 @@ const ToolbarOrderFilter = () => {
             },
             {
               label: "Shipped",
-              value: "shipped",
-
+              value: "Shipped",
               icon: Truck,
             },
             { label: "Delivered", value: "Delivered", icon: Package },
