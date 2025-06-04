@@ -25,10 +25,6 @@ export default function CartItem({
 
   const client = useQueryClient();
 
-  //  client.invalidateQueries({
-  //     queryKey: ["fetchData", "/cart"],
-  //   });
-
   const axios = useAxiosPrivate({ type: "private" });
   const user = useAuth();
   const { mutate, isPending } = useMutation({
