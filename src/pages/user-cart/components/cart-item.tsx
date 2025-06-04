@@ -5,10 +5,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Checkbox } from "@/components/ui/checkbox";
 import DeleteService from "@/components/shared/delete-service";
-import useSubmitData from "@/hooks/useSubmitData";
 import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import axios from "@/api/axios";
 import useAxiosPrivate from "@/hooks/useAxiosPrivate";
 import { useAuth } from "@/hooks/useAuth";
 
