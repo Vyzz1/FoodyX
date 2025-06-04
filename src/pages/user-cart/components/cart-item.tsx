@@ -56,7 +56,7 @@ export default function CartItem({
             if (cartItem.id === item.id) {
               return {
                 ...cartItem,
-                subTotal: cartItem.basePrice * quantity,
+                subTotal: cartItem.basePrice * quantity + cartItem.optionsPrice,
                 quantity: quantity,
               };
             }
